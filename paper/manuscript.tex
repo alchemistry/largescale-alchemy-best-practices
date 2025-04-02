@@ -328,6 +328,18 @@ From a drug discovery point of view, alchemical calculations are expanding their
 \tocsectioncomment{Possibly add discussion of different protocols, especially active learning. Best practices may not be well established but many companies are running at scale.}
 \tocsectioncomment{Discussion of merits of ABFE/ RBFE for virtual screening? See @Gary Tresadern comment from first meeting - lots of discussion around ABFE calculations for virtual screening.}
 
+General Simulation Planning can be seen as a three compartment problem. Starting with finding atom mappings, describing the changes and common structure parts of a molecule A to molecule B, the scoring of such a change, which can be finally used in building the Pertubation graph.
+
+\paragraph{Atom mappings}
+Atom mappings for single coordinate set approaches are required for the most common free energy calculation methods used in large scale approaches. In a large scale setup speed and robustness of an automated mapping approach are of the essence.
+Currently subgraph isomorphism solver (SIS) based MCSS searche based solutions are the most common approach addressing the problem. Many cheminformatics tools were implemented and are ready to be used: \textit{...tools... }. 
+These approaches are very accurate on the topological 2D information. However some approaches like \textit{... Tools ...} have been hybridized with the use of 3D information, yielding more robust approaches in terms of stereochemistry or molecule alignment, requirering well aligned input coordinates. On the speed aspect, SIS solvers have the disadvantage of trying to solve a NP complete problem. \cite{} This can be speed up with using a initial MCS seed. \cite{}
+An alternative to the SIS approach is the geometric bipartite matching approach atom mappers like:  \textit{... Tools ...}. These mappers allow very fast mappings due to the reduced algorithmic complexity ($O(N)=N^3$), with the prerequisite of very well aligned input geometries. In order to take topological changes into account, they follow up the 3D mapping with a filter step. 
+
+Overall do both approaches bring different advantages and disadvantages coupled with differing prerequisites. Depending on the parallelization and computational effort, it could be of interest to try both approaches and use a designated scoring method to judge which of the both approaches gave a better mapping (our assumption is in most cases the mappings will be very similar) to increase the robustness. With speed in mind, it depends on the input conditions. if the molecules are pre-aligned, the geometric approach offers a significant speed gain. However if the ligands have no 3d coordinates yet, the SIS approach is the way to go.
+
+
+
 \paragraph{Perturbation maps}
 \tocsectioncomment{Perturbation maps paragraph: @Mary Pitman/ @Jenke Scheen/ OpenFE team to update discussion of perturbation maps?}
 Based on the input ligand series, a perturbation map or network can be planned. Recent heuristics have shown the more connected the perturbation network the better. However, there is a way to optimize network structure while minimizing the number of perturbations that need to be computed reducing the resulting computational cost~\cite{yang2020optimal,xu2019optimal}. Sometimes the introduction of intermediates that are not part of the original congeneric series are essential to avoid ring breaking, or to deal with perturbations that would otherwise result in large numbers of atoms being inserted or deleted. Some commercial tools have good underlying heuristics but may fail with complicated input, needing user validation in particular when dealing with chiral compounds. 
