@@ -568,6 +568,22 @@
   number = {3}
 }
 
+@article{champion2023accelerating,
+	title = {Accelerating {Alchemical} {Free} {Energy} {Prediction} {Using} a {Multistate} {Method}: {Application} to {Multiple} {Kinases}},
+	shorttitle = {Accelerating {Alchemical} {Free} {Energy} {Prediction} {Using} a {Multistate} {Method}},
+	author = {Champion, Candide and Gall, René and Ries, Benjamin and Rieder, Salomé R. and Barros, Emilia P. and Riniker, Sereina},
+	year = {2023},
+  month = nov,
+	volume = {63},
+	pages = {7133--7147},
+  issn = {1549-9596},
+	doi = {10.1021/acs.jcim.3c01469},
+	abstract = {Alchemical free-energy methods based on molecular dynamics (MD) simulations have become important tools to identify modifications of small organic molecules that improve their protein binding affinity during lead optimization. The routine application of pairwise free-energy methods to rank potential binders from best to worst is impacted by the combinatorial increase in calculations to perform when the number of molecules to assess grows. To address this fundamental limitation, our group has developed replica-exchange enveloping distribution sampling (RE-EDS), a pathway-independent multistate method, enabling the calculation of alchemical free-energy differences between multiple ligands (N {\textgreater} 2) from a single MD simulation. In this work, we apply the method to a set of four kinases with diverse binding pockets and their corresponding inhibitors (42 in total), chosen to showcase the general applicability of RE-EDS in prospective drug design campaigns. We show that for the targets studied, RE-EDS is able to model up to 13 ligands simultaneously with high sampling efficiency, leading to a substantial decrease in computational cost when compared to pairwise methods.},
+	journal = {Journal of Chemical Information and Modeling},
+  number = {22},
+}
+
+
 @article{cheeseright2006molecular,
   title = {Molecular {{Field Extrema}} as {{Descriptors}} of {{Biological Activity}}:\, {{Definition}} and {{Validation}}},
   shorttitle = {Molecular {{Field Extrema}} as {{Descriptors}} of {{Biological Activity}}},
@@ -3228,6 +3244,20 @@
   journal = {Biophys. J.},
   language = {English},
   number = {3}
+}
+
+@article{rieder2022leveraging,
+	title = {Leveraging the sampling efficiency of {RE}-{EDS} in {OpenMM} using a shifted reaction-field with an atom-based cutoff},
+	author = {Rieder, Salomé R. and Ries, Benjamin and Kubincová, Alžbeta and Champion, Candide and Barros, Emilia P. and Hünenberger, Philippe H. and Riniker, Sereina},
+	year = {2022},
+	month = sep,
+	volume = {157},
+	pages = {104117},
+	issn = {0021-9606, 1089-7690},
+	doi = {10.1063/5.0107935},
+	abstract = {Replica-exchange enveloping distribution sampling (RE-EDS) is a pathway-independent multistate free-energy method currently implemented in the GROMOS software package for molecular dynamics (MD) simulations. It has a high intrinsic sampling efficiency as the interactions between the unperturbed particles have to be calculated only once for multiple end-states. As a result, RE-EDS is an attractive method for the calculation of relative solvation and binding free energies. An essential requirement for reaching this high efficiency is the separability of the nonbonded interactions into solute–solute, solute–environment, and environment–environment contributions. Such a partitioning is trivial when using a Coulomb term with a reaction-field (RF) correction to model the electrostatic interactions but not when using lattice-sum schemes. To avoid cutoff artifacts, the RF correction is typically used in combination with a charge-group-based cutoff, which is not supported by most small-molecule force fields as well as other MD engines. To address this issue, we investigate the combination of RE-EDS simulations with a recently introduced RF scheme including a shifting function that enables the rigorous calculation of RF electrostatics with atom-based cutoffs. The resulting approach is validated by calculating solvation free energies with the generalized AMBER force field in water and chloroform using both the GROMOS software package and a proof-of-concept implementation in OpenMM.},
+	journal = {The Journal of Chemical Physics},
+	number = {10}
 }
 
 @article{riniker2011calculation,
