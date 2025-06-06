@@ -343,7 +343,6 @@ In some cases, during the lead optimization stage, or for very large datasets th
 
 Methods from experimental design have been applied to the construction of the perturbation maps. Yang et al.~\cite{yang2020optimal} showed how to optimize the perturbation map by selecting a fixed number of calculations from the pairwise perturbations so that the resulting set of calculations minimize the total variance. Xu~\cite{xu2019optimal} showed how to optimize the perturbation map by allocating different amounts of simulation time to different pairwise perturbations so as to minimize the total variance, given the total simulation time of all the perturbation calculations. Both approaches lead to substantial reduction in the statistical error of the estimated free energies. 
 
-{\color{blue}
 \paragraph{Multistate methods}
 When dealing with large datasets, methods that compute the binding free energies of multiple ligands simultaneously offer a compelling alternative to pairwise calculations. These approaches -- categorized as "multiple end state" or "multistate" free energy calculations -- sidestep ligand network construction entirely and provide all pairwise free energy differences directly with similar statistical uncertainties (i.e., cycle closure is given by definition). One potential disadvantage of multistate methods is, however, that the presence of multiple end states may complicate the energy landscape, thus requiring longer, inherently sequential simulations. Additionally, they are often more difficult to set up as the combination of multiple ligand topologies into a dual or hybrid topology raises extra challenges \cite{ries2022restraintmaker}.
 
@@ -352,7 +351,7 @@ A well-established method from this category is enveloping distribution sampling
 H_R (\vec{q}) = - \beta s \ln{ \sum_{i=1}^N \left( e^{-\beta s (H_i(\vec{q})-E_i^R)}\right)},
 \end{equation}
 where $\vec{q}$ are the coordinates of the system, $\beta=(k_B T)^{-1}$ with $k_B$ being the Boltzmann constant and $T$ the absolute temperature, $N$ is the number of end-states, $s$ is the smoothing parameter and $E^R$ the energy offsets.
-The computational efficiency of EDS is mainly due to the fact that interactions between unperturbed protein and solvent degrees of freedom have to be calculated only once regardless of $N$, provided a pairwise decomposable method like e.g. reaction field \cite{tironi1995generalized} is used for the long-range electrostatic interactions. Thus, the computational cost of adding more ligands grows approximately linearly rather than quadratically (in a fully connected perturbation graph) \cite{champion2023accelerating}.
+The computational efficiency of EDS is mainly due to the fact that interactions between unperturbed protein and solvent degrees of freedom have to be calculated only once independent of $N$, provided a pairwise decomposable method like e.g. reaction field \cite{tironi1995generalized} is used for the long-range electrostatic interactions. Thus, the computational cost of adding more ligands grows approximately linearly rather than quadratically (in a fully connected perturbation graph) \cite{champion2023accelerating}.
 
 To ensure sampling of all end-states in the EDS simulation, the reference-state parameters $s$ and $E^R$ must be optimized.
 To simplify the calibration when $N >2$ and to improve the robustness of the methodology, multiple EDS reference-state potentials can be combined in a replica-exchange setup (termed RE-EDS) with different magnitudes of smoothing ($s$-parameter) \cite{sidler2016replica, sidler2017efficient, ries2022relative, champion2023accelerating}. 
@@ -360,7 +359,6 @@ RE-EDS simulations can be conducted using either a single or dual coordinate fra
 
 RE-EDS implementations in the GROMOS \cite{champion2023accelerating} or OpenMM \cite{rieder2022leveraging} software packages include automated parameter calibration procedures (i.e., optimizing the distribution of replicas in smoothness-parameter space, optimizing the energy offsets). Previous work showed that 15-30 ligands can be treated in a RE-EDS simulations in practice without issues \cite{rieder2022leveraging, champion2023accelerating,champion2024multistate}.
 However, sampling issues can occur for ligands that require insertion or deletion of many heavy atoms. In these cases, it is beneficial to split the set of ligands into smaller groups or include such a ligand via pairwise calculations.
-}
 
 \section{\tocred{How should I automate my calculations}}
 \label{sec:automation}
