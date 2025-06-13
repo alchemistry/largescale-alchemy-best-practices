@@ -568,6 +568,35 @@
   number = {3}
 }
 
+@article{champion2023accelerating,
+	title = {Accelerating {Alchemical} {Free} {Energy} {Prediction} {Using} a {Multistate} {Method}: {Application} to {Multiple} {Kinases}},
+	shorttitle = {Accelerating {Alchemical} {Free} {Energy} {Prediction} {Using} a {Multistate} {Method}},
+	author = {Champion, Candide and Gall, René and Ries, Benjamin and Rieder, Salomé R. and Barros, Emilia P. and Riniker, Sereina},
+	year = {2023},
+  month = nov,
+	volume = {63},
+	pages = {7133--7147},
+  issn = {1549-9596},
+	doi = {10.1021/acs.jcim.3c01469},
+	abstract = {Alchemical free-energy methods based on molecular dynamics (MD) simulations have become important tools to identify modifications of small organic molecules that improve their protein binding affinity during lead optimization. The routine application of pairwise free-energy methods to rank potential binders from best to worst is impacted by the combinatorial increase in calculations to perform when the number of molecules to assess grows. To address this fundamental limitation, our group has developed replica-exchange enveloping distribution sampling (RE-EDS), a pathway-independent multistate method, enabling the calculation of alchemical free-energy differences between multiple ligands (N {\textgreater} 2) from a single MD simulation. In this work, we apply the method to a set of four kinases with diverse binding pockets and their corresponding inhibitors (42 in total), chosen to showcase the general applicability of RE-EDS in prospective drug design campaigns. We show that for the targets studied, RE-EDS is able to model up to 13 ligands simultaneously with high sampling efficiency, leading to a substantial decrease in computational cost when compared to pairwise methods.},
+	journal = {Journal of Chemical Information and Modeling},
+  number = {22},
+}
+
+@article{champion2024multistate,
+	title = {Multistate {Method} to {Efficiently} {Account} for {Tautomerism} and {Protonation} in {Alchemical} {Free}-{Energy} {Calculations}},
+	author = {Champion, Candide and Hünenberger, Philippe H. and Riniker, Sereina},
+	year = {2024},
+	month = may,
+	volume = {20},
+	pages = {4350--4362},
+	issn = {1549-9618},
+	doi = {10.1021/acs.jctc.4c00370},
+	abstract = {The majority of drug-like molecules contain at least one ionizable group, and many common drug scaffolds are subject to tautomeric equilibria. Thus, these compounds are found in a mixture of protonation and/or tautomeric states at physiological pH. Intrinsically, standard classical molecular dynamics (MD) simulations cannot describe such equilibria between states, which negatively impacts the prediction of key molecular properties in silico. Following the formalism described by de Oliveira and co-workers (J. Chem. Theory Comput. 2019, 15, 424–435) to consider the influence of all states on the binding process based on alchemical free-energy calculations, we demonstrate in this work that the multistate method replica-exchange enveloping distribution sampling (RE-EDS) is well suited to describe molecules with multiple protonation and/or tautomeric states in a single simulation. We apply our methodology to a series of eight inhibitors of factor Xa with two protonation states and a series of eight inhibitors of glycogen synthase kinase 3β (GSK3β) with two tautomeric states. In particular, we show that given a sufficient phase-space overlap between the states, RE-EDS is computationally more efficient than standard pairwise free-energy methods.},
+	journal = {Journal of Chemical Theory and Computation},
+	number = {10},
+}
+
 @article{cheeseright2006molecular,
   title = {Molecular {{Field Extrema}} as {{Descriptors}} of {{Biological Activity}}:\, {{Definition}} and {{Validation}}},
   shorttitle = {Molecular {{Field Extrema}} as {{Descriptors}} of {{Biological Activity}}},
@@ -3230,6 +3259,51 @@
   number = {3}
 }
 
+@article{rieder2022leveraging,
+	title = {Leveraging the sampling efficiency of {RE}-{EDS} in {OpenMM} using a shifted reaction-field with an atom-based cutoff},
+	author = {Rieder, Salomé R. and Ries, Benjamin and Kubincová, Alžbeta and Champion, Candide and Barros, Emilia P. and Hünenberger, Philippe H. and Riniker, Sereina},
+	year = {2022},
+	month = sep,
+	volume = {157},
+	pages = {104117},
+	issn = {0021-9606, 1089-7690},
+	doi = {10.1063/5.0107935},
+	abstract = {Replica-exchange enveloping distribution sampling (RE-EDS) is a pathway-independent multistate free-energy method currently implemented in the GROMOS software package for molecular dynamics (MD) simulations. It has a high intrinsic sampling efficiency as the interactions between the unperturbed particles have to be calculated only once for multiple end-states. As a result, RE-EDS is an attractive method for the calculation of relative solvation and binding free energies. An essential requirement for reaching this high efficiency is the separability of the nonbonded interactions into solute–solute, solute–environment, and environment–environment contributions. Such a partitioning is trivial when using a Coulomb term with a reaction-field (RF) correction to model the electrostatic interactions but not when using lattice-sum schemes. To avoid cutoff artifacts, the RF correction is typically used in combination with a charge-group-based cutoff, which is not supported by most small-molecule force fields as well as other MD engines. To address this issue, we investigate the combination of RE-EDS simulations with a recently introduced RF scheme including a shifting function that enables the rigorous calculation of RF electrostatics with atom-based cutoffs. The resulting approach is validated by calculating solvation free energies with the generalized AMBER force field in water and chloroform using both the GROMOS software package and a proof-of-concept implementation in OpenMM.},
+	journal = {The Journal of Chemical Physics},
+	number = {10}
+}
+
+@article{ries2022relative,
+	title = {Relative free-energy calculations for scaffold hopping-type transformations with an automated {RE}-{EDS} sampling procedure},
+	author = {Ries, Benjamin and Normak, Karl and Weiß, R. Gregor and Rieder, Salomé and Barros, Emília P. and Champion, Candide and König, Gerhard and Riniker, Sereina},
+	year = {2022},
+	month = feb,
+	volume = {36},
+	pages = {117--130},
+	issn = {0920-654X, 1573-4951},
+	doi = {10.1007/s10822-021-00436-z},
+	abstract = {The calculation of relative free-energy differences between different compounds plays an important role in drug design to identify potent binders for a given protein target. Most rigorous methods based on molecular dynamics simulations estimate the free-energy difference between pairs of ligands. Thus, the comparison of multiple ligands requires the construction of a “state graph”, in which the compounds are connected by alchemical transformations. The computational cost can be optimized by reducing the state graph to a minimal set of transformations. However, this may require individual adaptation of the sampling strategy if a transformation process does not converge in a given simulation time. In contrast, path-free methods like replica-exchange enveloping distribution sampling (RE-EDS) allow the sampling of multiple states within a single simulation without the pre-definition of alchemical transition paths. To optimize sampling and convergence, a set of RE-EDS parameters needs to be estimated in a pre-processing step. Here, we present an automated procedure for this step that determines all required parameters, improving the robustness and ease of use of the methodology. To illustrate the performance, the relative binding free energies are calculated for a series of checkpoint kinase 1 inhibitors containing challenging transformations in ring size, opening/closing, and extension, which reflect changes observed in scaffold hopping. The simulation of such transformations with RE-EDS can be conducted with conventional force fields and, in particular, without soft bond-stretching terms.},
+	journal = {Journal of Computer-Aided Molecular Design},
+	language = {en},
+	number = {2},
+}
+
+@article{ries2022restraintmaker,
+	title = {{RestraintMaker}: a graph-based approach to select distance restraints in free-energy calculations with dual topology},
+	shorttitle = {{RestraintMaker}},
+	author = {Ries, Benjamin and Rieder, Salomé and Rhiner, Clemens and Hünenberger, Philippe H. and Riniker, Sereina},
+	year = {2022},
+	month = mar,
+	volume = {36},
+	pages = {175--192},
+	issn = {0920-654X, 1573-4951},
+	doi = {10.1007/s10822-022-00445-6},
+	abstract = {The calculation of relative binding free energies (RBFE) involves the choice of the end-state/system representation, of a sampling approach, and of a free-energy estimator. System representations are usually termed “single topology” or “dual topology”. As the terminology is often used ambiguously in the literature, a systematic categorization of the system representations is proposed here. In the dual-topology approach, the molecules are simulated as separate molecules. Such an approach is relatively easy to automate for high-throughput RBFE calculations compared to the single-topology approach. Distance restraints are commonly applied to prevent the molecules from drifting apart, thereby improving the sampling efficiency. In this study, we introduce the program RestraintMaker, which relies on a greedy algorithm to find (locally) optimal distance restraints between pairs of atoms based on geometric measures. The algorithm is further extended for multi-state methods such as enveloping distribution sampling (EDS) or multi-site -dynamics. The performance of RestraintMaker is demonstrated for toy models and for the calculation of relative hydration free energies. The Python program can be used in script form or through an interactive GUI within PyMol. The selected distance restraints can be written out in GROMOS or GROMACS file formats. Additionally, the program provides a human-readable JSON format that can easily be parsed and processed further. The code of RestraintMaker is freely available on GitHub https://github.com/rinikerlab/restraintmaker.},
+	journal = {Journal of Computer-Aided Molecular Design},
+	language = {en},
+	number = {3},
+}
+
 @article{riniker2011calculation,
   title = {Calculation of {{Relative Free Energies}} for {{Ligand}}-{{Protein Binding}}, {{Solvation}}, and {{Conformational Transitions Using}} the {{GROMOS Software}}},
   author = {Riniker, Sereina and Christ, Clara D. and Hansen, Halvor S. and H{\"u}nenberger, Philippe H. and Oostenbrink, Chris and Steiner, Denise and {van Gunsteren}, Wilfred F.},
@@ -3751,6 +3825,22 @@
   number = {14}
 }
 
+@article{sidler2016replica,
+	title = {Replica exchange enveloping distribution sampling ({RE}-{EDS}): {A} robust method to estimate multiple free-energy differences from a single simulation},
+	shorttitle = {Replica exchange enveloping distribution sampling ({RE}-{EDS})},
+	author = {Sidler, Dominik and Schwaninger, Arthur and Riniker, Sereina},
+	year = {2016},
+	month = oct,
+	volume = {145},
+	pages = {154114},
+	issn = {0021-9606, 1089-7690},
+	doi = {10.1063/1.4964781},
+	abstract = {In molecular dynamics (MD) simulations, free-energy differences are often calculated using free energy perturbation or thermodynamic integration (TI) methods. However, both techniques are only suited to calculate free-energy differences between two end states. Enveloping distribution sampling (EDS) presents an attractive alternative that allows to calculate multiple free-energy differences in a single simulation. In EDS, a reference state is simulated which “envelopes” the end states. The challenge of this methodology is the determination of optimal reference-state parameters to ensure equal sampling of all end states. Currently, the automatic determination of the reference-state parameters for multiple end states is an unsolved issue that limits the application of the methodology. To resolve this, we have generalised the replica-exchange EDS (RE-EDS) approach, introduced by Lee et al. [J. Chem. Theory Comput. 10, 2738 (2014)] for constant-pH MD simulations. By exchanging configurations between replicas with different reference-state parameters, the complexity of the parameter-choice problem can be substantially reduced. A new robust scheme to estimate the reference-state parameters from a short initial RE-EDS simulation with default parameters was developed, which allowed the calculation of 36 free-energy differences between nine small-molecule inhibitors of phenylethanolamine N-methyltransferase from a single simulation. The resulting free-energy differences were in excellent agreement with values obtained previously by TI and two-state EDS simulations.},
+	journal = {The Journal of Chemical Physics},
+	language = {en},
+	number = {15},
+}
+
 @article{sidler2017efficient,
   title = {Efficient {{Round}}-{{Trip Time Optimization}} for {{Replica}}-{{Exchange Enveloping Distribution Sampling}} ({{RE}}-{{EDS}})},
   author = {Sidler, Dominik and {Crist{\`o}fol-Clough}, Michael and Riniker, Sereina},
@@ -4020,6 +4110,20 @@
   title = {Some {{Thoughts}} on {{Evaluating Predictive Models}}},
   file = {/Users/toni_brain/Zotero/storage/AS3JPCZ2/some-thoughts-on-evaluating-predictive.html},
   journal = {Some Thoughts on Evaluating Predictive Models}
+}
+
+@article{tironi1995generalized,
+	title = {A generalized reaction field method for molecular dynamics simulations},
+	author = {Tironi, Ilario G. and Sperb, René and Smith, Paul E. and van Gunsteren, Wilfred F.},
+	year = {1995},
+	month = apr,
+	volume = {102},
+	pages = {5451--5459},
+	issn = {0021-9606},
+	doi = {10.1063/1.469273},
+	abstract = {Molecular dynamics simulations of ionic systems require the inclusion of long‐range electrostatic forces. We propose an expression for the long‐range electrostatic forces based on an analytical solution of the Poisson–Boltzmann equation outside a spherical cutoff, which can easily be implemented in molecular simulation programs. An analytical solution of the linearized Poisson–Boltzmann (PB) equation valid in a spherical region is obtained. From this general solution special expressions are derived for evaluating the electrostatic potential and its derivative at the origin of the sphere. These expressions have been implemented for molecular dynamics (MD) simulations, such that the surface of the cutoff sphere around a charged particle is identified with the spherical boundary of the Poisson–Boltzmann problem. The analytical solution of the Poisson–Boltzmann equation is valid for the cutoff sphere and can be used for calculating the reaction field forces on the central charge, assuming a uniform continuum of given ionic strength beyond the cutoff. MD simulations are performed for a periodic system consisting of 2127 SPC water molecules with 40 NaCl ions (1 molar). We compare the structural and dynamical results obtained from MD simulations in which the long range electrostatic interactions are treated differently; using a cutoff radius, using a cutoff radius and a Poisson–Boltzmann generalized reaction field force, and using the Ewald summation. Application of the Poisson–Boltzmann generalized reaction field gives a dramatic improvement of the structure of the solution compared to a simple cutoff treatment, at no extra computational cost.},
+	journal = {The Journal of Chemical Physics},
+	number = {13},
 }
 
 @article{trott2010autodock,
