@@ -73,7 +73,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\versionnumber}{0.1} % you should update the minor version number in preprints and major version number of submissions.
-\newcommand{\githubrepository}{\url{https://github.com/alchemistry/alchemical-best-practices}} %this should be the main github repository for this article
+\newcommand{\githubrepository}{\url{https://github.com/alchemistry/largescale-alchemy-best-practices}} %this should be the main github repository for this article
 \newcommand{\expect}[1]{\left\langle{#1}\right\rangle}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ARTICLE SETUP
@@ -83,12 +83,14 @@
 \author[2]{Bryce K. Allen}
 \author[3]{Hannah E. Bruce Macdonald}
 \author[3*]{John D. Chodera}
+\author[9]{Vytautas Gapsys}
 \author[9]{David F. Hahn}
 \author[1,10]{Maximilian Kuhn}
 \author[1]{Julien Michel}
 \author[4*]{David L. Mobley}
 \author[5]{Levi N. Naden}
 \author[6]{Samarjeet Prasad}
+\author[11,12]{Benjamin Ries}
 \author[2,7]{Andrea Rizzi}
 \author[1]{Jenke Scheen}
 \author[8*]{Michael R. Shirts}
@@ -105,6 +107,8 @@
 \affil[8]{University of Colorado Boulder, Boulder, CO, USA}
 \affil[9]{Computational Chemistry, Janssen Research \& Development, Turnhoutseweg 30, Beerse B-2340, Belgium}
 \affil[10]{Cresset, Cambridgeshire, UK}
+\affil[11]{Boehringer Ingelheim Pharma GmbH \& Co KG, Medicinal Chemistry, Birkendorfer Str 65, 88397 Biberach an der Riss, Germany}
+\affil[12]{Open Free Energy, Open Molecular Software Foundation, Davis, CA, 95616, United State}
 
 %
 \corr{antonia.mey@ed.ac.uk}{ASJSM}
@@ -121,12 +125,14 @@
 \orcid{David L. Mobley}{0000-0002-1083-5533}
 \orcid{Levi N. Naden}{0000-0002-3692-5027}
 \orcid{Samarjeet Prasad}{0000-0001-8320-6482}
+\orcid{Benjamin Ries}{0000-0002-0945-8304}
 \orcid{Andrea Rizzi}{0000-0001-7693-2013}
 \orcid{Jenke Scheen}{0000-0001-9781-0445}
 \orcid{Michael R. Shirts}{0000-0003-3249-1097}
 \orcid{Gary Tresadern}{0000-0002-4801-1644}
 \orcid{Huafeng Xu}{0000-0001-5447-0452}
 \orcid{David F. Hahn}{0000-0003-2830-6880}
+\orcid{Vytautas Gapsys}{0000-0002-6761-7780}
 
 \blurb{This LiveCoMS document is maintained online on GitHub at \githubrepository; to provide feedback, suggestions, or help improve it, please visit the GitHub repository and participate via the issue tracker.}
 
@@ -135,12 +141,12 @@
 %%% Fill out these parameters when available
 %%% These are used when the "pubversion" option is invoked
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\pubDOI{10.33011/livecoms.2.1.18378}
-\pubvolume{2}
-\pubyear{2020}
-\articlenum{18378}
-\datereceived{5 August 2020}
-\dateaccepted{25 November 2020}
+% \pubDOI{10.33011/livecoms.2.1.18378}
+% \pubvolume{2}
+% \pubyear{2020}
+% \articlenum{18378}
+% \datereceived{5 August 2020}
+% \dateaccepted{25 November 2020}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ARTICLE START
@@ -328,6 +334,9 @@ From a drug discovery point of view, alchemical calculations are expanding their
 \tocsectioncomment{Possibly add discussion of different protocols, especially active learning. Best practices may not be well established but many companies are running at scale.}
 \tocsectioncomment{Discussion of merits of ABFE/ RBFE for virtual screening? See @Gary Tresadern comment from first meeting - lots of discussion around ABFE calculations for virtual screening.}
 
+\paragraph{Study design}
+When planning a large scale prospective application, it is likely that the main objective is identification of novel high affinity binders. This goal also dictates the overall planning of calculation campaign: in this scenario it is not necessary to obtain an accurate binding free energy difference for each compound, but rather quickly filter out non-binders and weak binders, and focus the computational effort on the promising candidates. One approach for such a study, is to design a two step protocol: (i) FEC using short simulation times, ligands connected in a starmap configuration. This step is meant to filter out a large portion of weak binders: even if free energy estimates for each edge are not well converged, non-binders and weak binding affinities will be identified; (ii) standard FEC protocol with an optimal ligand connection map to obtain accurate free energy differences.
+
 \paragraph{Perturbation maps}
 \tocsectioncomment{Perturbation maps paragraph: @Mary Pitman/ @Jenke Scheen/ OpenFE team to update discussion of perturbation maps?}
 Based on the input ligand series, a perturbation map or network can be planned. Recent heuristics have shown the more connected the perturbation network the better. However, there is a way to optimize network structure while minimizing the number of perturbations that need to be computed reducing the resulting computational cost~\cite{yang2020optimal,xu2019optimal}. Sometimes the introduction of intermediates that are not part of the original congeneric series are essential to avoid ring breaking, or to deal with perturbations that would otherwise result in large numbers of atoms being inserted or deleted. Some commercial tools have good underlying heuristics but may fail with complicated input, needing user validation in particular when dealing with chiral compounds. 
@@ -343,10 +352,24 @@ In some cases, during the lead optimization stage, or for very large datasets th
 
 Methods from experimental design have been applied to the construction of the perturbation maps. Yang et al.~\cite{yang2020optimal} showed how to optimize the perturbation map by selecting a fixed number of calculations from the pairwise perturbations so that the resulting set of calculations minimize the total variance. Xu~\cite{xu2019optimal} showed how to optimize the perturbation map by allocating different amounts of simulation time to different pairwise perturbations so as to minimize the total variance, given the total simulation time of all the perturbation calculations. Both approaches lead to substantial reduction in the statistical error of the estimated free energies. 
 
+There is a growing trend for virtual screens to process increasingly large datasets—ranging from millions to billions of compounds—driven by the availability of scalable cloud computing resources and make-on-demand compound libraries. Absolute Binding Free Energy (ABFE) calculations are increasingly being adopted as a late-stage filter in virtual screening campaigns. To maximize enrichment in hit compounds identified from libraries generated through docking, ABFE should ideally be deployed on large compound datasets (hundreds to tens of thousands of molecules).
+However, because ABFE is generally more computationally expensive to converge than Relative Binding Free Energy (RBFE) calculations, large-scale ABFE campaigns are currently undertaken predominantly by well-resourced companies. Consequently, there has been limited reporting from academic groups to guide best practices in this area.
+Specific challenges have been reported in the use of algorithms that automate the selection of protein–ligand translational-orientational restraints. For example, in the widely used ‘Boresch restraints’ scheme, it is well known that restraint parameters should be selected to minimize the risk of collinear angles between restrained atoms.~\cite{Wu2025} Heuristics, based on short molecular dynamics (MD) simulations performed prior to ABFE calculations, have been proposed to address this.~\cite{Heinzelmann2024,Hedges2023} Given the high computational costs, some groups have suggested using relatively short ABFE simulations to drive active learning cycles in virtual screening.~\cite{CrivelliDecker2024} However, more research is needed to determine whether robust surrogate estimators can be derived from noisy, short-run ABFE outputs.
+Another unresolved issue concerns the accuracy achievable with ABFE calculations. Many published benchmarks have focused on congeneric series originally designed to validate RBFE protocols. These may represent favorable cases for ABFE as well, due to greater cancellation of systematic errors in protein–ligand interactions, as well as unambiguous binding pose, compared to cases involving structurally diverse scaffolds.\cite{Merz2010} Furthermore, benchmarks based on enrichment rates may be misleading, as they also reflect the accuracy of the input poses generated by docking.
+For some targets, long-timescale ABFE calculations yield binding free energy estimates consistent with experimental data. However, calculated binding free energies are often overestimated. It has been suggested that this overestimation may stem from a systematic offset due to protein reorganization free energy contributions, which are not fully captured on the timescales of typical ABFE simulations.~\cite{Chen2023} While methods to take protein apo-holo reorganization into account exist~\cite{khalak2021absdg,fajer2023protreorg}, it may become challenging to apply them in a virtual screening scenario where compounds of diverse chemistry may require considering different protein holo states. Further work is needed to assess how this contribution varies across chemically diverse scaffolds and different protein targets.
+
+
 \section{\tocred{How should I automate my calculations}}
 \label{sec:automation}
 \tocsectioncomment{Include e.g. automated selection of where to concentrate sampling time e.g. https://pubs.acs.org/doi/10.1021/acs.jctc.1c00703, automated selection of restraints for ABFE, link with discussion of available tools?}
-\tocsectioncomment{@OpenFE team well placed to contribute. Discuss tools like alchemiscale? Discuss e.g. integration with REINVENT/ Maize for active learning?}
+\tocsectioncomment{@OpenFE team well placed to contribute. Discuss tools like alchemiscale? Discuss e.g. integration with REINVENT/ Maize for active learning?
+@Vytas Gapsys}
+
+Application of free energy calculations (FEC) on a large scale, naturally, requires automation of the workflow. For a smaller scale explorations, often related to method development in an academic setting, a usual approach is tying together the individual steps with scripts. This, however, often proves to be error prone, requires human intervention, lacks transferrability and is difficult to upscale. With the individual components of the FEC workflow becoming more robust, also, the solutions to automate the full pipeline started to emerge.
+
+FESetup~\cite{loeffler2015fesetup} was one of the earliest FEC automation efforts: it allowed ligand parameterization, protein preparation, atom mapping, topology generation, and prepared simulation boxes. Nowadays, the more advanced toolkits, also provide functionality of executing the simulations by dispatching, monitoring and, if needed, resubmitting jobs to a cluster or HPC facility. Some examples of automated workflows include alchemiscale~\cite{alchemiscale}, Icolos~\cite{moore2023icolos} and its successor Maize~\cite{lohr2024maize}. Alternatively, one may use building blocks from one of the FE calculation packages, e.g. OpenFE~\cite{openfe}, BioSimSpace~\cite{hedges2019biosimspace}, pmx~\cite{gapsys2015pmx}, and connect them by means of a workflow manager such as Luigi~\cite{luigi}, Apache Airflow~\cite{airflow} or KNIME~\cite{knime}.
+
+A few words on active learning combined with FEC. Unfinished...
 
 \section{\tocorange{Data analysis}}
 \label{sec:data_ana}
@@ -395,6 +418,13 @@ An example of a best practice scatter comparison between computed and experiment
 \label{sec:unsettled}
 
 \subsection{Unsettled practices}
+
+In general, typical free energy workflows are best suited for when true ligand binding modes are well-known and available in advance, which of course poses challenges when such methods are applied prospectively. Typically for relative free energy calculations, ligands in a congeneric or related series are assumed to have similar/the same binding mode, preserving the location of any shared scaffold, though this will not always be the case. In other situations, practitioners may wish to generate ligand binding modes using fast and approximate methods such as docking, which can impact the accuracy of resulting free energy calculations since such binding modes may be less than reliable. 
+
+While the binding mode issue alone poses challenges, it also impacts overall free energy workflows. In particular, for relative free energy calculations (which are the most broadly used in large scale applications), pose consistency affects how free energy calculations should be planned (i.e. the issue of ligand perturbation maps, and also that of atom mapping). Related ligands sharing a consistent binding mode constitute an easier perturbation than related ligands with dissimilar binding modes, so the choice of pose generation approach and the confidence in provided poses affects downstream ligand perturbation network and atom mapping. Best practices are not well understood here, nor thoroughly explored, though some choices will clearly be better than others -- for example, if input ligand poses are carefully curated, shared across ligands, and likely accurate in 3D, then atom mapping approaches that use 3D, like Kartograf~\cite{}, will likely provide superior results, but if poses are more dissimilar and not as well curated in 3D, alternate approaches may be superior.  Such choices may also interact with the choice of perturbation planning algorithm in a way which is not yet well understood. 
+
+Similar issues may affect the optimal choice of absolute vs. relative free energy calculations in typical applications, e.g. when a ligand series is highly related and typically shares a common binding mode (within some tolerance) relative calculations may yield good performance, but as binding mode inconsistency grows, absolute calculations may offer advantages for perturbations that change the binding mode -- even if the ligands are highly structurally related. 
+
 \tocsubsubsectioncomment{Include discussion of active learning/ fast ABFE for virtual screening?}
 
 \subsection{Current limitations}
@@ -407,51 +437,73 @@ An example of a best practice scatter comparison between computed and experiment
 %  Benchmark information  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{\tocorange{Alchemical free energy datasets: an overview}}
-\tocsectioncomment{@Volunteers to update this section}
+% \tocsectioncomment{@Volunteers to update this section}
 \label{sec:benchmark}
-The following contains a non-exhaustive summary of alchemical free energy datasets that can serve as a starting point to review approaches or test new implementations. The field is moving towards a more standardised way of generating protein-ligand benchmark datasets and the progress of these efforts can be tracked here: \url{https://github.com/openforcefield/FE-Benchmarks-Best-Practices}. Currently lacking an exhaustive set of benchmark datasets, the review by Williams-Noonan et al.~\cite{williams-noonan2018free} contains an overview of recently published alchemical free energy studies. For comparison of FEP+ and Gromacs (using the AMBER99SB-ILDN and GAFF2 force field), cf. the recently published study by Pérez-Benito et al.~\cite{perez-benito2019predicting}.
-An overview of further suggested benchmark sets can be found in the review by Mobley and Gilson~\cite{mobley2017predicting} or on \url{alchemistry.org}~\cite{alchemistry}. These include cyclodextrins, the Cytochrome C peroxidase (CCP) protein model binding site, thrombin and bromodomains as well as solvation benchmark sets~\cite{paliwal2011benchmark}. Please refer to table~\ref{tab:benchmarks}, for a small overview of datasets, what forcefields they used, and what the original study was it came from. 
+The quality of datasets used for method development, validation, and benchmarking is the determining factor for the reliability and reproducibility of alchemical free energy methods. Diverse, high-quality datasets that capture both structural and thermodynamic protein-ligand interaction data are essential for constructing robust benchmarks for alchemical free energy calculations. In this section, we provide a non-exhaustive overview of current alchemical free energy datasets that can serve as a starting point to assessing the performance of existing alchemical free energy approaches or to testing and benchmarking new methods. 
+
+Community blind challenges have served as a rich source of free energy data and a powerful way for researchers to assess the prospective predictive utility of their methods. The Statistical Assessment of the Modeling of Proteins and Ligands (SAMPL) challenges, for example, have provided the free energy community with experimental structural and affinity data from synthetic supramolecular host-guest systems ~\cite{
+amezcua_sampl9_2024, amezcua_overview_2022, amezcua_sampl7_2021, rizzi_overview_2018, yin_overview_2017, muddana_sampl4_2014}. These systems allow researchers to evaluate the predictive performance of their methods on relatively simple test cases due to their relatively small size and limited conformational flexibility. Similarly, the Drug Design Data Resource (D3R) Grand Challenges have made available protein-ligand crystal structures along with experimentally-measured affinities ~\cite{parks_d3r_2020, gaieb_d3r_2019, gaieb_d3r_2018, gathiaka_d3r_2016}. Of particular importance for alchemical free energy methods, these datasets sometimes include defined congeneric series that enable benchmarking of relative binding free energy methods. Additional blind challenges include CASP challenges ~\cite{gilson_assessment_2025} as well as the pan-coronavirus challenge (hosted by the Open Molecular Software Foundation, the AI-driven Structure-enabled Antiviral Platform, and Polaris) ~\cite{macdermott-opeskin_computational_2025}. In a field where subtle data leakage or hidden biases may inflate the apparent performance of an alchemical method, blind challenges remain essential for rigorously assessing their predictive power and generalizability. 
+
+Several companies have made valuable datasets publicly available. Schr\"{o}dinger released an FEP benchmark dataset ~\cite{ross_maximal_2023} consisting of 54 individual targets and 1,237 protein-ligand pairs with affinities.  They used this dataset to evaluate the theoretical accuracy ceiling for binding free energy calculations. Merck KGaA also released a benchmark set with 8 targets and 264 protein-ligand pairs with affinities ~\cite{schindler_large-scale_2020}. They aggregated this from publicly available data and used it to assess the accuracy of their free energy calculations. These datasets, along with others released from industry sources, have become important resources for benchmarking alchemical methods. 
+
+In recent years, datasets that include computationally-derived protein-ligand structures— such as those obtained through docking or co-folding—have become increasingly common. For instance, docked structures were used in the construction of BigBind ~\cite{brocidiacono_bigbind_2024}. BigBind starts with CrossDocked2020: a dataset built by clustering experimental protein-ligand complexes based on binding pocket similarity, and then augmenting the dataset by docking ligands into other similar pockets ~\cite{francoeur_three-dimensional_2020}. BigBind maps ChEMBL activity data to CrossDocked2020 to generate a dataset that pairs structures and affinities. This dataset is then used to develop a neural network-based classifier that distinguishes active and inactive compounds. Similarly, a template-based modeling approach was used to construct BindingNet—a dataset that augments experimental protein-ligand structures to include ligands with similar structure and known affinities to the same protein. This dataset has useful applications in affinity prediction and pose prediction tasks. Additionally, SandboxAQ recently introduced a dataset of over one million co-folded protein-ligand structures (generated using the Boltz-1x model) and paired affinities ~\cite{lemos_sair_2025}. Efforts are already demonstrating that augmented data can improve alchemical free energy predictions ~\cite{valsson_narrowing_2025}. 
+
+Despite these extensive efforts, the need for high-quality, standardized datasets persists. While aggregating affinity data across different assays may seem like a powerful way to enhance the predictive power of alchemical tools, merging measurements from different assays introduces substantial noise and error, thus reducing the reliability of downstream predictions ~\cite{landrum_combining_2024}. There is a critical need for high-throughput affinity data generated from a single, standardized experimental source across a diverse set of protein targets. The field is progressing toward more systematic and reproducible approaches to generating protein-ligand benchmark datasets. Ongoing developments in this area can be tracked via the following resource: \url{https://github.com/openforcefield/FE-Benchmarks-Best-Practices}.
+
+For a concise list of selected benchmark dataset, many of which were described above, along with their number of distinct protein targets and target-ligand complexes, please refer to Table~\ref{tab:benchmarks}.
+
 
 \begin{table}
 \caption{Selection of example datasets}
-\begin{tabular}{cccc}
-\textbf{Publication} & \textbf{Targets} & \textbf{Ligands} & \textbf{Force Field} \\
+% \begin{tabular}{lr}
+\begin{tabular}{p{4.5cm}p{3.5cm}}
+\textbf{Dataset} & \textbf{\shortstack{Targets;\\Target-Ligand Structures\\ and Affinities}} \\
 \hline
-\multicolumn{4}{|c|}{D3R Grand Challenges~\cite{D3R}} \\
+\multicolumn{2}{|c|}{D3R Grand Challenges~\cite{noauthor_d3r_nodate}} \\
 \hline
-GC3~\cite{gaieb2019d3r} & 6 & 266 & various \\
-GC2~\cite{gaieb2018d3r} & 1 & 102 & various \\
-GC2015~\cite{gathiaka2016d3r} & 2 & 215 & various \\
+GC4~\cite{parks_d3r_2020} & \hspace{1cm} 2; 613 \\
+GC3~\cite{gaieb_d3r_2019} & \hspace{1cm} 6; 429 \\
+GC2~\cite{gaieb_d3r_2018} & \hspace{1cm} 1; 36 \\
+GC2015~\cite{gathiaka_d3r_2016} & \hspace{1cm} 2; 18 \\
 \hline
-\multicolumn{4}{|c|}{SAMPL Challenges~\cite{SAMPL}} \\
+\multicolumn{2}{|c|}{SAMPL Challenges\textsuperscript{a}~\cite{noauthor_sampl_nodate}} \\
 \hline
-SAMPL6~\cite{rizzi2018overview} & 3 & 21 & various \\
-SAMPL5~\cite{yin2017overview} & 3 & 22 & various \\
-SAMPL4~\cite{muddana2014sampl4} & 2 & 23 & various \\
+SAMPL9~\cite{amezcua_sampl9_2024} & \hspace{1cm} 3; 23 \\
+SAMPL8~\cite{amezcua_overview_2022} & \hspace{1cm} 3; 17 \\
+SAMPL7~\cite{amezcua_sampl7_2021} & \hspace{1cm} 3; 50 \\
+SAMPL6~\cite{rizzi_overview_2018} & \hspace{1cm} 3; 30 \\
+SAMPL5~\cite{yin_overview_2017} & \hspace{1cm} 3; 22 \\
+SAMPL4~\cite{muddana_sampl4_2014} & \hspace{1cm} 2; 23 \\
+
 \hline
-\multicolumn{4}{|c|}{Schrödinger Datasets} \\
+\multicolumn{2}{|c|}{Additional Community Challenges} \\
 \hline
-FEP+ Dataset~\cite{wang2015accurate} & 8 & 199 & OPLS2.1 \\
-FEP+ Dataset~\cite{harder2016opls3} & 8 & 199 & OPLS3 \\
-FEP+ Dataset~\cite{roos2019opls3e} & 8 & 199 & OPLS3e \\
-FEP+ Dataset~\cite{song2019using} & 8 & 199 & GAFF 1.8 \\
-FEP+ Dataset~\cite{gapsys2020large} & 8 & 199 & various \\
-FEP+ Dataset~\cite{kuhn2020assessment} & 8 & 199 & GAFF2.1 \\
-Fragments ~\cite{steinbrecher2015accurate} & 8 & 96 & OPLS2.1 \\
-Scaffold Hopping~\cite{wang2017accurate} & 6 & 21 & OPLS3 \\
-Scaffold Hopping~\cite{kuhn2020assessment} & 6 & 21 & GAFF2.1 \\
-Macrocycles~\cite{yu2017accurate} & 7 & 33 & OPLS3 \\
+CASP16  ~\cite{gilson_assessment_2025} & \hspace{1cm} 5; 140 \\
+Pan-coronavirus dataset ~\cite{macdermott-opeskin_computational_2025} & \hspace{1cm} 2; 2,303 \\
+
 \hline
-\multicolumn{4}{|c|}{Further Suggested Datasets} \\
+\multicolumn{2}{|c|}{Additional Alchemical Datasets} \\
 \hline
-Cucurbit[7]uril (CB7)~\cite{mobley2017predicting} & 1 & 15 & NA \\
-Deep cavity cavitand~\cite{mobley2017predicting} & 2 & 19 & NA \\
-T4 Lysozyme~\cite{mobley2017predicting} & 2 & 20 & NA \\
-Merck set~\cite{MCompChem2019Sep} & 5 & 169 & OPSL3 \\
+BindingNet v2* ~\cite{zhu_augmented_2025} & \hspace{1cm} 1,794; 689,796 \\
+BigBind* ~\cite{brocidiacono_bigbind_2024} & \hspace{1cm} 1,107; 582,957 \\
+Merck KGaA dataset~\cite{schindler_large-scale_2020} & \hspace{1cm} 8; 264 \\
+PLINDER ~\cite{durairaj_plinder_2024} & \hspace{1cm} 11,154\textsuperscript{b}; 78,410 \\
+PoseBusters ~\cite{buttenschoen_posebusters_2024} & \hspace{1cm} 308; 308\textsuperscript{\ddag}\\
+Protein-ligand benchmark ~\cite{hahn_best_2022} & \hspace{1cm} 21; 559 \\
+Ross et al. benchmark ~\cite{ross_maximal_2023} & \hspace{1cm} 54; 1,237 \\
+Runs N' Poses ~\cite{skrinjar_have_2025} & \hspace{1cm} 2,585; 3,047\textsuperscript{\ddag}\\
+SAIR* ~\cite{lemos_sair_2025} & \hspace{1cm} 5,149; 1,048,857 \\
+sc-PDB ~\cite{desaphy_sc-pdb_2015} & \hspace{1cm} 3,678; 5,608\textsuperscript{\ddag}\\
+
 
 \hline
 \label{tab:benchmarks}
 \end{tabular}
+\vspace{0.5em}
+\caption*{\footnotesize * Denotes datasets that are augmented with computational data, including docked structures or co-folded. \\
+\textsuperscript{a} Denotes that targets are supramolecular hosts rather than proteins.\\
+\textsuperscript{b} Distinct protein targets are identified using SCOP domains. Plinder draws data from over 100,000s PDB IDs.\\
+\textsuperscript{\ddag} Denotes target-ligand affinities are not provided, only target-ligand structures are available.}
 \end{table}
 
 \section{\tocorange{Checklist}}
@@ -609,6 +661,7 @@ JDC is a current member of the Scientific Advisory Board of OpenEye Scientific S
 %%%%%%%
 ASJSM and JM acknowledge funding through an EPSRC flagship software grant: EP/P022138/1
 MK and JM acknowledge funding through Innovate UK by KTP partnership 011120.
+BR - wrote 
 AR acknowledges partial support from the Tri-Institutional Program in Computational Biology and Medicine and the Sloan Kettering Institute.
 HEBM acknowledges support from a Molecular Sciences Software Institute Investment Fellowship and Relay Therapeutics.
 DLM acknowledges support from the National Institutes of Health (R01GM108889, R01GM124270, and R01GM132386), and the National Science Foundation (CHE 1352608).
